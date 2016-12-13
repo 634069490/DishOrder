@@ -48,6 +48,19 @@ var commonStyle = StyleSheet.create({
         backgroundColor:"#a9ea00",
         height:45,
     },
+
+    titleRowRight: {
+        alignSelf: "flex-end",
+        marginTop: -45,
+        height: 45,
+        paddingRight: 10,
+        paddingLeft: 10,
+        justifyContent:"center",
+    },
+    titleRowRightText: {
+        color: "#ffffffff",
+        fontSize: 16,
+    },
     loginText: {
         margin: 20,
         fontSize: 20,

@@ -67,10 +67,10 @@ var DishChooseView = React.createClass({
                         <Text style={commonStyle.titleText}>
                             选择菜肴
                         </Text>
-                        <TouchableOpacity style={styles.titleRowRight} onPress={() => {
+                        <TouchableOpacity style={commonStyle.titleRowRight} onPress={() => {
                             this.pressSure();
                         }}>
-                            <Text style={styles.titleRowRightText} >
+                            <Text style={commonStyle.titleRowRightText} >
                                 提交
                             </Text>
                         </TouchableOpacity>
@@ -220,21 +220,6 @@ var styles = StyleSheet.create({
         width: width,
         justifyContent: "center",
     },
-
-    titleRowRight: {
-        alignSelf: "flex-end",
-        marginTop: -45,
-        height: 45,
-        paddingRight: 10,
-        paddingLeft: 10,
-        justifyContent:"center",
-    },
-
-    titleRowRightText: {
-        color: "#ffffffff",
-        fontSize: 16,
-    },
-
 });
 
 module.exports = DishChooseView;
