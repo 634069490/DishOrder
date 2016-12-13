@@ -42,7 +42,7 @@ var LoginView = React.createClass({
             return (
                 <View>
                     <Text style={commonStyle.titleText}>
-                        登陆
+                        登录
                     </Text>
 
                     <Text style={styles.baseText}>
