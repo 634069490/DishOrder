@@ -1,0 +1,19 @@
+//{
+//  "compilerOptions": {
+//    "module": "commonjs",
+//    "target": "es5",
+//    "sourceMap": true
+//  },
+//  "exclude": [
+//    "node_modules"
+//  ]
+//}
+{
+	"dish":[{"name": "剁椒鱼头", "id": 0,"price":66,"check":false},
+	{"name": "鱼香肉丝", "id": 1,"price":16,"check":false},
+	{"name": "农家小炒肉", "id": 2,"price":28,"check":false},
+	{"name": "茄子豆角", "id": 3,"price":18,"check":false},
+	{"name": "清炒时蔬", "id": 4,"price":10,"check":false},
+	{"name": "水库烤鱼", "id": 5,"price":88,"check":false}
+      ]
+}

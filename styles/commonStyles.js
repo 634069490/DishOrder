@@ -29,6 +29,11 @@ var commonStyle = StyleSheet.create({
         color:"#ffffffff"
     },
 
+    basePage: {
+        backgroundColor:"#ffffffff",
+        flex: 1
+    },
+
     baseText: {
         marginLeft: 20,
         marginRight: 20,
@@ -41,6 +46,7 @@ var commonStyle = StyleSheet.create({
         textAlign: "center",
         color:"#ffffffff",
         backgroundColor:"#a9ea00",
+        height:45,
     },
     loginText: {
         margin: 20,

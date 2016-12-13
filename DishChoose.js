@@ -1,6 +1,4 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
  */
 'use strict';
 
@@ -26,7 +24,11 @@ var Dimensions = require('Dimensions');
 
 var {width} = Dimensions.get('window');
 
+var dishDatas = require('./json/dish.json').dish;
+
 var _navigator;
+
+var dishsChoose = [];
 
 BackAndroid.addEventListener('hardwareBackPress', function () {
     if (_navigator == null) {
@@ -43,7 +45,9 @@ BackAndroid.addEventListener('hardwareBackPress', function () {
 var DishChooseView = React.createClass({
 
     getInitialState: function () {
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2 || r1.check != r2.check
+        });
         return {
             dataSource: ds.cloneWithRows(this.genRows({})),
         };
@@ -58,10 +62,19 @@ var DishChooseView = React.createClass({
         _navigator = navigator;
         if (route.id === 'main') {
             return (
-                <View>
-                    <Text style={commonStyle.titleText}>
-                        选择菜谱
-                    </Text>
+                <View style={commonStyle.basePage}>
+                    <View>
+                        <Text style={commonStyle.titleText}>
+                            选择菜肴
+                        </Text>
+                        <TouchableOpacity style={styles.titleRowRight} onPress={() => {
+                            this.pressSure();
+                        }}>
+                            <Text style={styles.titleRowRightText} >
+                                提交
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
 
                     <ListView contentContainerStyle={styles.listStyle}
                               dataSource={this.state.dataSource}
@@ -95,60 +108,92 @@ var DishChooseView = React.createClass({
         )
     },
 
-    renderRow: function (rowData: string, sectionID: number, rowID: number,
+    renderRow: function (rowData, sectionID: number, rowID: number,
                          highlightRow: (sectionID: number, rowID: number) => void) {
         var imgSource = IMAGE_URLS[rowID];
+        var checkSource;
+        if (rowData.check) {
+            checkSource = CHECK_URLS[1];
+        } else {
+            checkSource = CHECK_URLS[0];
+        }
+
         return (
-            <TouchableHighlight style={styles.rowStyle} onPress={() => {
-                //this.pressRow(rowID);
+            <TouchableOpacity style={styles.rowStyle} onPress={() => {
+                this.pressRow(rowID);
             }}>
                 <View>
                     <View style={styles.rowStyle}>
                         <Image style={styles.thumb} source={imgSource}/>
                         <Text style={styles.text}>
-                            {rowData}
+                            {rowData.name}
                         </Text>
+                        <Image style={styles.thumbCheck} source={checkSource}/>
                     </View>
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         );
     },
 
     genRows: function (pressData: {[key: number]: boolean}): Array<string> {
-        var dataBlob = [];
-        dataBlob.push('全部');
-        dataBlob.push('湘菜');
-        dataBlob.push('川菜');
-        dataBlob.push('上海菜');
-        dataBlob.push('东北菜');
-        return dataBlob;
+        return dishDatas;
     },
 
-    pressRow: function (rowID: number) {
+
+    pressRow(rowID: number) {
         this._pressData[rowID] = !this._pressData[rowID];
+        dishDatas[rowID].check = !dishDatas[rowID].check;
+
+        if(dishDatas[rowID].check){
+            dishsChoose.push(dishDatas[rowID]);
+        }else{
+            dishsChoose.splice(dishDatas[rowID]);
+        }
+
+        dishDatas = JSON.parse(JSON.stringify(dishDatas));
         this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(
-                _navigator.push({title: 'DishChoose', id: 'dishChoose'})
-                // this.genRows(this._pressData)
-            )
+            dataSource: this.state.dataSource.cloneWithRows(this.genRows(this._pressData))
         });
+    },
+
+    pressSure() {
+        var sum = 0;
+        for(var i = 0;i<dishsChoose.length;i++){
+            sum += dishsChoose[i].price;
+        }
+
+        var alertMessage = "共" + dishsChoose.length + "个菜," + "总价为:" + sum;;
+        Alert.alert(
+            '确认菜单',
+            alertMessage,
+            [
+                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
+                {text: '确定', onPress: () => ToastAndroid.show("提交成功",ToastAndroid.LONG)},
+            ]
+        );
     },
 });
 
 var IMAGE_URLS = [
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+];
+
+var CHECK_URLS = [
+    require('./images/uncheck.png'),
+    require('./images/check.png'),
 ];
 
 var styles = StyleSheet.create({
     rowStyle: {
         alignItems: 'center', //这里要注意，如果每个Item都在外层套了一个 Touchable的时候，一定要设置Touchable的宽高
         width: width / 3,
-        height: 103,
+        height: 120,
         padding: 5,
     },
     listStyle: {
@@ -159,9 +204,35 @@ var styles = StyleSheet.create({
         width: 64,
         height: 64,
     },
+    thumbCheck: {
+        width: 15,
+        height: 15,
+        marginTop: -8,
+    },
     text: {
         marginBottom: 10,
         marginTop: 5
+    },
+    titleRow: {
+        flexDirection: "row",
+        //是否换行
+        // flexWrap:"nowrap",
+        width: width,
+        justifyContent: "center",
+    },
+
+    titleRowRight: {
+        alignSelf: "flex-end",
+        marginTop: -45,
+        height: 45,
+        paddingRight: 10,
+        paddingLeft: 10,
+        justifyContent:"center",
+    },
+
+    titleRowRightText: {
+        color: "#ffffffff",
+        fontSize: 16,
     },
 
 });

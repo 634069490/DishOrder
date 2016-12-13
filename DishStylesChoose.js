@@ -63,7 +63,7 @@ var DishStylesView = React.createClass({
         _navigator = navigator;
         if(route.id === 'main'){
             return (
-                <View>
+                <View style={commonStyle.basePage}>
                     <Text style={commonStyle.titleText}>
                         选择菜谱
                     </Text>
@@ -103,7 +103,7 @@ var DishStylesView = React.createClass({
         var rowHash = Math.abs(hashCode(rowData));
         var imgSource = IMAGE_URLS[rowHash % IMAGE_URLS.length];
         return (
-            <TouchableHighlight onPress={() => {
+            <TouchableOpacity onPress={() => {
                 this._pressRow(rowID);
             }}>
                 <View>
@@ -114,7 +114,7 @@ var DishStylesView = React.createClass({
                         </Text>
                     </View>
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         );
     },
 
@@ -153,12 +153,12 @@ var DishStylesView = React.createClass({
 });
 
 var IMAGE_URLS = [
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
-    require('./images/app_icon.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
+    require('./images/dish.png'),
 ];
 
 /* eslint no-bitwise: 0 */
